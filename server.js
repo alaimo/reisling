@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // @author Jonathan Alaimo
 // @date 8.15.2016
-// @description Entrypoint for the reisling server
+// @description Entrypoint for the riesling server
 // ----------------------------------------------------------------------------
 
 var http = require('http'),

@@ -1,21 +1,21 @@
 {
-  "name": "reisling",
+  "name": "riesling",
   "version": "0.1.0",
-  "description": "Lightweight opinionated approach to bootstrapping an express web application",
+  "description": "A lightweight opinionated approach for bootstrapping express web applications",
   "main": "server.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alaimo/reisling.git"
+    "url": "git+https://github.com/alaimo/riesling.git"
   },
   "author": "Jonathan Alaimo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alaimo/reisling/issues"
+    "url": "https://github.com/alaimo/riesling/issues"
   },
-  "homepage": "https://github.com/alaimo/reisling#readme",
+  "homepage": "https://github.com/alaimo/riesling#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
     "express": "^4.14.0",
