@@ -56,12 +56,6 @@ function pour(params, prepare) {
   // Add default uncaught error handling
   app.use(policies.uncaughtErrorDomain(server));
 
-  // support a proxy service if a proxy domain is provided
-  // and we are not in production mode.
-  if(params.proxy) {
-    app.use(policies.proxyService(params.proxy));
-  }
-
   // Synchronously execute the configuration callback. If necessary support
   // asychronous configuration later on.
   if(prepare) {
@@ -71,6 +65,12 @@ function pour(params, prepare) {
     app.get('/error', (req, res) => {
       throw new Error('blah');
     });
+  }
+
+  // support a proxy service if a proxy domain is provided
+  // and we are not in production mode.
+  if(params.proxy) {
+    app.use(policies.proxyService(params.proxy));
   }
 
   // Handle 404
