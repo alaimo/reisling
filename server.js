@@ -63,7 +63,7 @@ function pour(params, prepare) {
   } else {
     app.get('/', (req, res) => res.render('index.njk'));
     app.get('/error', (req, res) => {
-      throw new Error('blah');
+      throw new Error('This is an error.');
     });
   }
 
