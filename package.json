@@ -1,0 +1,36 @@
+{
+  "name": "reisling",
+  "version": "0.1.0",
+  "description": "Lightweight opinionated approach to bootstrapping an express web application",
+  "main": "server.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alaimo/reisling.git"
+  },
+  "author": "Jonathan Alaimo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alaimo/reisling/issues"
+  },
+  "homepage": "https://github.com/alaimo/reisling#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "express": "^4.14.0",
+    "log4js": "^0.6.38",
+    "nunjucks": "^2.4.2",
+    "request": "^2.74.0",
+    "require-all": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^3.0.2",
+    "sinon": "^1.17.5",
+    "sinon-chai": "^2.8.0"
+  }
+}

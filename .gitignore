@@ -1,0 +1,10 @@
+# dependecies
+node_modules
+
+# vscode project files
+.vscode
+jsconfig.json
+
+# intellisense files
+typings
+typings.json
