@@ -30,7 +30,7 @@ function pour(params, prepare) {
 
   // Support method signatures with and without params.
   if(typeof params === 'function') {
-    prepare = params,
+    prepare = params;
     params = {};
   } else {
     params = params || {};
@@ -107,7 +107,7 @@ module.exports = {
   Bluebird: Bluebird,
   constants: utils.constants,
   express: express,
-  log: utils.log,
+  log: log,
   policies: policies,
   pour: pour,
   template: utils.template
