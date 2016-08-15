@@ -1,2 +1,2 @@
 # reisling
-Lightweight opinionate approach for bootstrapping an express web application.
+A lightweight opinionated approach for bootstrapping an express web application.
