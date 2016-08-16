@@ -12,11 +12,21 @@ module.exports = function(grunt) {
         esnext: true,
         node: true
       },
-      files: [
-        '*.js',
-        'test/**/*.js',
-        'lib/**/*.js'
-      ]
+      server: {
+        src: [
+          '*.js',
+          'lib/**/*.js'
+        ]
+      },
+      test: {
+        options: {
+          // needed for chai expect expressions
+          expr: true
+        },
+        src: [
+          'test/**/*.js'
+        ]
+      }
     },
     mochaTest: {
       options: {

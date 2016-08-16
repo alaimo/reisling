@@ -9,7 +9,7 @@ var sinon = require('sinon'),
   expect = require('chai').use(sinonChai).expect,
   nunjucks = require('nunjucks'),
   requireAll = require('require-all'),
-  policies = requireAll(__dirname + '/../../lib/policies');
+  policies = requireAll(__dirname + '/../lib/policies');
 
 describe('policies', function() {
 
