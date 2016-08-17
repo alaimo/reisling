@@ -159,4 +159,65 @@ describe('server', () => {
 
   }); // #proxy
 
+  describe('#tmpl', () => {
+    var testServer;
+
+    afterEach(() => {
+      if(testServer) {
+        testServer.close();
+      }
+    });
+
+    it('should accept a string', done => {
+      riesling.pour({
+        views: __dirname + '/views2'
+      }).
+      spread((app, server) => {
+        testServer = server;
+        app.render('ok.njk', {}, function(err, data) {
+          expect(err).to.not.be.ok;
+          expect(data).to.equal('OK');
+          done();
+        });
+      }).
+      catch(err => done(err));
+    });
+
+    it('should accept an array', done => {
+      riesling.pour({
+        views: [__dirname + '/views2']
+      }).
+      spread((app, server) => {
+        testServer = server;
+        app.render('ok.njk', {}, function(err, data) {
+          expect(err).to.not.be.ok;
+          expect(data).to.equal('OK');
+          done();
+        });
+      }).
+      catch(err => done(err));
+    });
+
+    it('should accept on object', done => {
+      riesling.pour({
+        views: {
+          paths: [__dirname + '/views2'],
+          opts: {
+            autoescape: true
+          }
+        }
+      }).
+      spread((app, server) => {
+        testServer = server;
+        app.render('ok.njk', {}, function(err, data) {
+          expect(err).to.not.be.ok;
+          expect(data).to.equal('OK');
+          done();
+        });
+      }).
+      catch(err => done(err));
+    });
+
+  }); // #tmpl
+
 });

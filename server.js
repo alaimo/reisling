@@ -18,7 +18,10 @@ var http = require('http'),
 // if you are developing microservices locally against a deployed environment.
 //
 // @param params Object
-// @param params.views Array || String
+// @param views String || Array || Object
+// @param params.tmpl(views)
+// @param params.tmpl.paths Array || String
+// @param params.tmpl.opts Object
 // @param params.port Number
 // @param params.proxy Object
 // @param prepare
@@ -26,7 +29,9 @@ function pour(params, prepare) {
   var app = express(),
     server = http.createServer(app),
     port,
-    views;
+    tmpl,
+    tmplPaths,
+    tmplOpts;
 
   // Support method signatures with and without params.
   if(typeof params === 'function') {
@@ -42,16 +47,36 @@ function pour(params, prepare) {
   // Set log4js as the express logger
   app.use(log.express());
 
-  // Default template engine configuration
-  views = params.views || [];
-  // Convert views to an array if needed so that we can add the default
-  // view paths
-  if(typeof views === 'string') {
-    views = [views];
+  // Accept views as an alias for tmpl. We need to check type here
+  // accept a string, array, or object
+  tmpl = params.tmpl || params.views;
+  if(!tmpl) {
+    log.info('No template configuration provided');
+  } else if(typeof tmpl === 'string') {
+    tmplPaths = [tmpl];
+  } else if(Array.isArray(tmpl)) {
+    tmplPaths = tmpl;
+  } else {
+    tmplPaths = tmpl.paths;
+    tmplOpts = tmpl.opts;
+  }
+
+  // Validate template options and set defaults
+  tmplPaths = tmplPaths || [];
+  if(typeof tmplPaths === 'string'){
+    tmplPaths = [tmplPaths];
   }
   // Always append the default view templates.
-  views.push(__dirname + '/views');
-  utils.template.init(views, {autoescape: true, express: app});
+  tmplPaths.push(__dirname + '/views');
+
+  // Validate template options and set defaults
+  tmplOpts = tmplOpts || {};
+  // We should always set autoescape by default
+  tmplOpts.autoescape = tmplOpts.autoescape === false;
+  tmplOpts.express = app;
+
+  // Configure and set the template engine
+  utils.template.express(tmplPaths, tmplOpts);
 
   // Add default uncaught error handling
   app.use(policies.uncaughtErrorDomain(server));
