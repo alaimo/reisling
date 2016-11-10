@@ -1,6 +1,6 @@
 {
   "name": "riesling",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A lightweight opinionated approach for bootstrapping express web applications",
   "main": "server.js",
   "scripts": {
@@ -19,14 +19,19 @@
     "url": "https://github.com/alaimo/riesling/issues"
   },
   "homepage": "https://github.com/alaimo/riesling#readme",
-  "dependencies": {
-    "bluebird": "^3.4.1",
+  "peerDependencies": {
+    "bluebird": "^3.4.6",
     "express": "^4.14.0",
-    "log4js": "^0.6.38",
-    "nunjucks": "^2.4.2",
-    "request": "^2.74.0"
+    "log4js": "^1.0.1",
+    "nunjucks": "^3.0.0",
+    "request": "^2.78.0"
   },
   "devDependencies": {
+    "bluebird": "^3.4.6",
+    "express": "^4.14.0",
+    "log4js": "^1.0.1",
+    "nunjucks": "^3.0.0",
+    "request": "^2.78.0",
     "chai": "^3.5.0",
     "jshint": "^2.9.4",
     "mocha": "^3.0.2",
