@@ -6,10 +6,19 @@
 
 var http = require('http'),
   Bluebird = require('bluebird'),
-  requireAll = require('require-all'),
   express = require('express'),
-  policies = requireAll(__dirname + '/lib/policies'),
-  utils = requireAll(__dirname + '/lib/utils'),
+  policies = {
+    globalError: require('./lib/policies/globalError'),
+    proxyService: require('./lib/policies/proxyService'),
+    routeNotFound: require('./lib/policies/routeNotFound'),
+    uncaughtErrorDomain: require('./lib/policies/uncaughtErrorDomain')
+  },
+  utils = {
+    config: require('./lib/utils/config'),
+    constants: require('./lib/utils/constants'),
+    logger: require('./lib/utils/logger'),
+    template: require('./lib/utils/template')
+  },
   log = utils.logger;
 
 // Method to bootstrap an express web service. Adds basic uncaught error

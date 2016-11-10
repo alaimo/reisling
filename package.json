@@ -1,10 +1,13 @@
 {
   "name": "riesling",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A lightweight opinionated approach for bootstrapping express web applications",
   "main": "server.js",
   "scripts": {
-    "test": "grunt test"
+    "lint": "jshint --exclude ./node_modules/ .",
+    "pretest": "npm run lint",
+    "test": "mocha test/**.test.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -21,17 +24,19 @@
     "express": "^4.14.0",
     "log4js": "^0.6.38",
     "nunjucks": "^2.4.2",
-    "request": "^2.74.0",
-    "require-all": "^2.0.0"
+    "request": "^2.74.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "grunt": "^1.0.1",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-mocha-test": "^0.12.7",
+    "jshint": "^2.9.4",
     "mocha": "^3.0.2",
     "request-promise": "^4.1.1",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0"
+  },
+  "jshintConfig": {
+    "node": true,
+    "esnext": true,
+    "expr": true
   }
 }
