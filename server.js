@@ -138,9 +138,7 @@ if(require.main === module) {
 // Export utilits, policies, and low level resources for use as needed.
 // In general, end-users will just need pour, log, and template.
 module.exports = {
-  Bluebird: Bluebird,
   constants: utils.constants,
-  express: express,
   log: log,
   policies: policies,
   pour: pour,

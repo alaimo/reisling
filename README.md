@@ -1,9 +1,9 @@
 # riesling
-A lightweight opinionated approach for bootstrapping Express web applications with
-bluebird, nunjucks, log4js, and request.
+A lightweight opinionated approach for bootstrapping web applications with
+express, nunjucks, bluebird, request, and log4js.
 
 ## install
-Note: as of v0.2.0 express, nunjucks, bluebird, request, and log4js are all listed
+Note: as of v0.2.0, express, nunjucks, bluebird, request, and log4js are all listed
 as peerDependencies.
 
 ```
