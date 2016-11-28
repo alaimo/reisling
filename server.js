@@ -104,7 +104,8 @@ function pour(params, prepare) {
   // support a proxy service if a proxy domain is provided
   // and we are not in production mode.
   if(params.proxy) {
-    app.use(policies.proxyService(params.proxy));
+    let proxies = Array.isArray(params.proxy) ? params.proxy : [params.proxy];
+    proxies.forEach(proxy => app.use(policies.proxyService(proxy)));
   }
 
   // Handle 404

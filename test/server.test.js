@@ -8,43 +8,53 @@ var request = require('request-promise'),
   sinon = require('sinon'),
   sinonChai = require('sinon-chai'),
   expect = require('chai').use(sinonChai).expect,
-  riesling = require(__dirname + '/../server.js');
+  riesling = require(__dirname + '/../server.js'),
+  remoteServerUrl = 'http://localhost:4000',
+  remoteServer2Url = 'http://localhost:5000',
+  proxyServerUrl = 'http://localhost:3000';
 
-describe('server', () => {
+// factory method to create dummy test servers
+function rServer(port, testRoute, cookieRoute) {
+  return riesling.pour({port: port}, app => {
+    // basic test api
+    app.get(testRoute, (req, res) => res.send('OK'));
+    // test api for cookies
+    app.get(cookieRoute, (req, res) => {
+      res.cookie('x-test-token', 'ok', {
+        maxAge: 10000,
+        secure: true,
+        httpOnly: true
+      }).
+      cookie('x-invalid-token', 'invalid', {
+        httpOnly: true,
+        secure: true
+      }).
+      send('OK');
+    });
+  });
+}
 
-  describe('#proxy', () => {
+describe('server', function() {
+
+  describe('#proxy', function() {
     var testRoute = '/test',
       cookieRoute = '/cookie',
-      remoteServerUrl = 'http://localhost:4000',
-      proxyServerUrl = 'http://localhost:3000',
       remoteServer,
       proxyServer;
 
-    beforeEach(done => {
-      riesling.pour({port: 4000}, app => {
-        // basic test api
-        app.get(testRoute, (req, res) => res.send('OK'));
-        // test api for cookies
-        app.get(cookieRoute, (req, res) => {
-          res.cookie('x-test-token', 'ok', {
-            maxAge: 10000,
-            secure: true,
-            httpOnly: true
-          }).
-          cookie('x-invalid-token', 'invalid', {
-            httpOnly: true,
-            secure: true
-          }).
-          send('OK');
-        });
-      }).
+    beforeEach(function(done) {
+      rServer(
+        4000,
+        testRoute,
+        cookieRoute
+      ).
       spread((app, server) => {
         remoteServer = server;
         done();
       });
     });
 
-    afterEach(() => {
+    afterEach(function() {
       if(proxyServer) {
         proxyServer.close();
         proxyServer = null;
@@ -55,7 +65,7 @@ describe('server', () => {
       }
     });
 
-    it('should proxy a request to the remote server', done => {
+    it('should proxy a request to the remote server', function(done) {
       riesling.pour({
         proxy:{
           url: remoteServerUrl
@@ -72,7 +82,7 @@ describe('server', () => {
       catch(err => done(err));
     });
 
-    it('should whitelist cookies', done => {
+    it('should whitelist cookies', function(done) {
       riesling.pour({
         proxy: {
           url: remoteServerUrl,
@@ -97,7 +107,7 @@ describe('server', () => {
       });
     });
 
-    it('should strip secure tags from listed cookies', done => {
+    it('should strip secure tags from listed cookies', function(done) {
       riesling.pour({
         proxy: {
           url: remoteServerUrl,
@@ -128,7 +138,7 @@ describe('server', () => {
       });
     });
 
-    it('should proxy specific paths', done => {
+    it('should proxy specific paths', function(done) {
       riesling.pour({
         proxy: {
           url: remoteServerUrl,
@@ -159,6 +169,81 @@ describe('server', () => {
 
   }); // #proxy
 
+  describe('#multiproxy', function() {
+    var r1,
+      r2,
+      p1;
+
+    before(function(done) {
+      rServer(
+        4000,
+        '/test',
+        '/cookie'
+      ).
+      spread((app, server) => {
+        r1 = server;
+        return rServer(
+          5000,
+          '/test2',
+          '/cookie2'
+        );
+      }).
+      spread((app, server) => {
+        r2 = server;
+        done();
+      });
+    });
+
+    after(function() {
+      if(r1) {
+        r1.close();
+        r1 = null;
+      }
+
+      if(r2) {
+        r2.close();
+        r2 = null;
+      }
+
+      if(p1) {
+        p1.close();
+        p1 = null;
+      }
+    });
+
+    it('should support multiple proxy configs', function(done) {
+      riesling.pour({
+        proxy: [{
+          url: remoteServerUrl,
+          paths: ['/test']
+        }, {
+          url: remoteServer2Url,
+          paths: ['/test2']
+        }]
+      }).
+      spread((app, server) => {
+        p1 = server;
+        return request.get({
+          url: proxyServerUrl + '/test',
+          resolveWithFullResponse: true
+        });
+      }).
+      then(response => {
+        expect(response.statusCode).to.equal(200);
+        return request.get({
+          url: proxyServerUrl + '/test2',
+          resolveWithFullResponse: true
+        });
+      }).
+      then(response => {
+        expect(response.statusCode).to.equal(200);
+        done();
+      }).
+      catch(err => done(err));
+    });
+
+  }); // multiproxy
+
   describe('#tmpl', () => {
     var testServer;
 
@@ -168,7 +253,7 @@ describe('server', () => {
       }
     });
 
-    it('should accept a string', done => {
+    it('should accept a string', function(done) {
       riesling.pour({
         views: __dirname + '/views2'
       }).
@@ -183,7 +268,7 @@ describe('server', () => {
       catch(err => done(err));
     });
 
-    it('should accept an array', done => {
+    it('should accept an array', function(done) {
       riesling.pour({
         views: [__dirname + '/views2']
       }).
@@ -198,7 +283,7 @@ describe('server', () => {
       catch(err => done(err));
     });
 
-    it('should accept on object', done => {
+    it('should accept on object', function(done) {
       riesling.pour({
         views: {
           paths: [__dirname + '/views2'],
